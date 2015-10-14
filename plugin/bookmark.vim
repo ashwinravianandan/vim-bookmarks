@@ -424,16 +424,11 @@ function! s:set_up_auto_save(file)
        autocmd!
        autocmd BufWinEnter * call s:add_missing_signs(expand('<afile>:p'))
      augroup END
-     if g:bookmark_manage_per_buffer ==# 1
-       augroup bm_auto_save
-         autocmd BufLeave * call s:auto_save()
-         autocmd VimLeave * call s:auto_save()
-       augroup END
-     else
-       augroup bm_auto_save
-         autocmd VimLeave * call s:auto_save()
-       augroup END
-     endif
+
+     augroup bm_auto_save
+       autocmd BufLeave * call s:auto_save()
+       autocmd VimLeave * call s:auto_save()
+     augroup END
    endif
 endfunction
 
