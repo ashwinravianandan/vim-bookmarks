@@ -6,6 +6,7 @@ scriptencoding utf-8
 let g:bm_has_any = 0
 let g:bm_sign_index = 9500
 let g:bm_current_file = ''
+let g:bm_automark_todo = 0
 
 " Configuration {{{
 
@@ -32,15 +33,20 @@ call s:set('g:bookmark_auto_close',           0 )
 call s:set('g:bookmark_center',               0 )
 
 function! s:init(file)
-  if g:bookmark_auto_save ==# 1 || g:bookmark_manage_per_buffer ==# 1
-    augroup bm_vim_enter
-      autocmd!
-      autocmd BufEnter * call s:set_up_auto_save(expand('<afile>:p'))
-    augroup END
-  endif
-  if a:file !=# ''
-    call s:set_up_auto_save(a:file)
-  endif
+   if g:bookmark_auto_save ==# 1 || g:bookmark_manage_per_buffer ==# 1
+      augroup bm_vim_enter
+         autocmd!
+         autocmd BufEnter * call s:set_up_auto_save(expand('<afile>:p'))
+      augroup END
+   endif
+   if g:bm_automark_todo ==# 1
+      augroup bm_vim_enter
+         autocmd InsertLeave * if &ft == 'cpp' | call AnnotateTodoComments() | endif
+      augroup END
+   endif
+   if a:file !=# ''
+      call s:set_up_auto_save(a:file)
+   endif
 endfunction
 
 autocmd VimEnter * call s:init(expand('<afile>:p'))
@@ -48,6 +54,16 @@ autocmd VimEnter * call s:init(expand('<afile>:p'))
 " }}}
 
 
+function! AnnotateTodoComments()
+   "let rawKeyStrokes = @.
+   let backup = @a
+   normal "ayy
+   "let numberOfLines = s/^@//gn
+   if @a =~? '\/\/.*todo\s*:.*'
+      call BookmarkAnnotate( @a, 0 )
+   endif
+   let @a = l:backup
+endfunction
 " Commands {{{
 
 function! BookmarkToggle()
