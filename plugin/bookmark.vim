@@ -59,7 +59,7 @@ function! AnnotateTodoComments()
    let backup = @a
    normal "ayy
    "let numberOfLines = s/^@//gn
-   if @a =~? '\/\/.*todo\s*:.*'
+   if @a =~? '\/\/.*todo\s*:.*' || @a =~? '\*.*todo\s*:.*'
       call BookmarkAnnotate( @a, 0 )
    endif
    let @a = l:backup
