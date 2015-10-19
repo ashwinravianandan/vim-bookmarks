@@ -6,7 +6,6 @@ scriptencoding utf-8
 let g:bm_has_any = 0
 let g:bm_sign_index = 9500
 let g:bm_current_file = ''
-let g:bm_automark_todo = 0
 
 " Configuration {{{
 
@@ -31,6 +30,7 @@ call s:set('g:bookmark_manage_per_buffer',    0 )
 call s:set('g:bookmark_auto_save_file',       $HOME .'/.vim-bookmarks')
 call s:set('g:bookmark_auto_close',           0 )
 call s:set('g:bookmark_center',               0 )
+call s:set('g:bm_automark_todo',              0 )
 
 function! s:init(file)
    if g:bookmark_auto_save ==# 1 || g:bookmark_manage_per_buffer ==# 1
